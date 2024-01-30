@@ -1,15 +1,15 @@
 import React from "react";
 
-const IconWrapper = ({ width, height, icon, func }) => {
+const IconWrapper = (props) => {
   return (
     <button
       style={{
-        width: width,
-        height: height,
+        width: props.width,
+        height: props.height,
       }}
-      onClick={func}
+      onClick={props.func}
     >
-      {icon}
+      {props.icon}
     </button>
   );
 };
