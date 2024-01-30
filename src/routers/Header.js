@@ -121,7 +121,7 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="w-full h-28 px-8 md:px-16 flex justify-between gap-8 items-center border-x-0 border-t-0 border">
+    <div className="w-full bg-white h-28 px-8 md:px-16 flex justify-between gap-8 items-center border-x-0 border-t-0 border">
       <HamburgerBar isOpen={isOpen} setIsOpen={setIsOpen} />
       <h1
         style={{

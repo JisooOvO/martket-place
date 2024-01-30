@@ -19,7 +19,6 @@ const items = [
   { id: 6, cateName: "Inner" },
   { id: 7, cateName: "Shoes" },
   { id: 8, cateName: "Acc" },
-  { id: 9, cateName: "Kids" },
 ];
 
 const CategoryNav = () => {
