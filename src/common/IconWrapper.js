@@ -7,7 +7,7 @@ const IconWrapper = (props) => {
         width: props.width,
         height: props.height,
       }}
-      onClick={props.func}
+      onClick={props.onclick}
     >
       {props.icon}
     </button>

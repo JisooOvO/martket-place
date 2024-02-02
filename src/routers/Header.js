@@ -28,7 +28,7 @@ const HeaderForm = () => {
         placeholder="검색어를 입력하세요."
       />
       <IconWrapper
-        func={handleSubmit}
+        onclick={handleSubmit}
         icon={<SearchIcon />}
         width={COMPONENT_WIDTH}
         height={"100%"}
@@ -54,7 +54,7 @@ const HeaderNav = (props) => {
         icon={<ShoppingCartIcon />}
         width={COMPONENT_WIDTH}
         height={COMPONENT_HEIGHT}
-        func={() => {
+        onclick={() => {
           props.navigate("/my_cart");
         }}
       />
@@ -62,7 +62,7 @@ const HeaderNav = (props) => {
         icon={<UserIcon />}
         width={COMPONENT_WIDTH}
         height={COMPONENT_HEIGHT}
-        func={() => {
+        onclick={() => {
           props.navigate("/my_page");
         }}
       />
@@ -86,14 +86,14 @@ const HamburgerBar = (props) => {
           icon={<CloseIcon />}
           width={COMPONENT_WIDTH}
           height={COMPONENT_HEIGHT}
-          func={handleHamburgerClick}
+          onclick={handleHamburgerClick}
         />
       ) : (
         <IconWrapper
           icon={<MenuIcon />}
           width={COMPONENT_WIDTH}
           height={COMPONENT_HEIGHT}
-          func={handleHamburgerClick}
+          onclick={handleHamburgerClick}
         />
       )}
     </div>

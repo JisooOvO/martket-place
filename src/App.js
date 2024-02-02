@@ -5,6 +5,8 @@ import Header from "./routers/Header";
 import Footer from "./routers/Footer";
 import Main from "./routers/Main";
 import Nav from "./routers/Nav";
+import Login from "./routers/Login";
+import Loading from "./routers/Loading";
 
 const MyCart = lazy(() => import("./routers/MyCart"));
 const MyPage = lazy(() => import("./routers/MyPage"));
@@ -20,7 +22,7 @@ const App = () => {
           <Route
             path="/my_cart"
             element={
-              <Suspense fallback={<div>{"Loading..."}</div>}>
+              <Suspense fallback={<Loading />}>
                 <MyCart />
               </Suspense>
             }
@@ -28,8 +30,16 @@ const App = () => {
           <Route
             path="/my_page"
             element={
-              <Suspense fallback={<div>{"Loading..."}</div>}>
+              <Suspense fallback={<Loading />}>
                 <MyPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <Suspense fallback={<Loading />}>
+                <Login />
               </Suspense>
             }
           />
