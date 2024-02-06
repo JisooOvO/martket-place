@@ -1,14 +1,11 @@
 import { useRecoilValue } from "recoil";
 import { AtomBamburgerIsOpen } from "../common/Atom";
-import IconWrapper from "../common/IconWrapper";
-import CategoryIcon from "../icons/CategoryIcon";
 import styled from "styled-components";
 
 const CategoryNavContainer = styled.nav`
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
 
   @media (min-width: 850px) {
     flex-direction: grow;
@@ -21,7 +18,7 @@ const CategoryNavContainer = styled.nav`
 const CategoryListWrapper = styled.ul`
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   overflow: hidden;
 `;
 
@@ -37,6 +34,7 @@ const NavContainer = styled.div`
   padding: 4rem 2rem 4rem 2rem;
   display: flex;
   position: fixed;
+  box-sizing: border-box;
   top: 7rem;
   background-color: #ffffff;
   z-index: 999;
@@ -49,25 +47,6 @@ const NavContainer = styled.div`
     padding-right: 4rem;
     justify-content: start;
   }
-`;
-
-const NavIconWrapper = styled.div`
-  display: none;
-  z-index: -10;
-  @media (min-width: 850px) {
-    width: 4rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-`;
-
-const CategoryTitle = styled.p`
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  font-weight: 600;
-  text-align: center;
-  white-space: nowrap;
 `;
 
 const items = [
@@ -92,22 +71,12 @@ const CategoryNav = () => {
   );
 };
 
-const NavIcon = () => {
-  return (
-    <NavIconWrapper>
-      <IconWrapper icon={<CategoryIcon />} width={30} height={2.5 + "rem"} />
-      <CategoryTitle>카테고리</CategoryTitle>
-    </NavIconWrapper>
-  );
-};
-
 const Nav = () => {
   const isOpen = useRecoilValue(AtomBamburgerIsOpen);
   return (
     <>
       {isOpen ? (
         <NavContainer>
-          <NavIcon />
           <CategoryNav />
         </NavContainer>
       ) : (

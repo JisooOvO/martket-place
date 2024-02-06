@@ -10,8 +10,8 @@ import { useNavigate } from "react-router-dom";
 import CloseIcon from "../icons/CloseIcon";
 import styled from "styled-components";
 
-const COMPONENT_HEIGHT = "40%";
-const COMPONENT_WIDTH = 30 + "px";
+const COMPONENT_HEIGHT = 3 + "rem";
+const COMPONENT_WIDTH = 2.5 + "rem";
 
 const FormWrapper = styled.form`
   height: ${(props) => props.height};
@@ -19,17 +19,17 @@ const FormWrapper = styled.form`
 
   @media (min-width: 850px) {
     display: flex;
-    align-items: center;
     flex-grow: 1;
+    align-items: center;
     gap: 2rem;
   }
 `;
 
 const Input = styled.input`
-  max-width: 60rem;
+  flex-grow: 1;
+  max-width: 40rem;
   min-width: 0px;
   height: 100%;
-  flex-grow: 1;
   border-width: 1px;
   border-radius: 1.5rem;
   border-color: #707070;
@@ -39,25 +39,22 @@ const Input = styled.input`
 
 const HeaderNavWrapper = styled.div`
   display: flex;
-  height: 80%;
+  height: 100%;
   gap: 1rem;
   align-items: center;
 
   @media (min-width: 850px) {
     gap: 2.5rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
   }
 `;
 
 const Container = styled.div`
-  width: 100%;
+  width: calc(100vw - 4rem);
   height: 7rem;
   display: flex;
   position: fixed;
   top: 0;
   z-index: 9999;
-  justify-content: space-between;
   align-items: center;
   gap: 2rem;
   padding-left: 2rem;
@@ -66,6 +63,7 @@ const Container = styled.div`
   background-color: white;
 
   @media (min-width: 850px) {
+    width: calc(100vw - 8rem);
     padding-left: 4rem;
     padding-right: 4rem;
   }
@@ -96,7 +94,7 @@ const HeaderForm = () => {
         onClick={handleSubmit}
         icon={<SearchIcon />}
         width={COMPONENT_WIDTH}
-        height={"80%"}
+        height={COMPONENT_HEIGHT}
       />
     </FormWrapper>
   );
@@ -168,18 +166,18 @@ const HamburgerBar = (props) => {
 const useResetWidth = () => {
   const [innerWidth, setInnerWidth] = useRecoilState(AtomInnerWidth);
 
-  const resetInnerWidth = () => {
-    setInnerWidth(window.innerWidth);
-  };
-
   useEffect(() => {
+    const resetInnerWidth = () => {
+      setInnerWidth(window.innerWidth);
+    };
+
     resetInnerWidth();
     window.addEventListener("resize", resetInnerWidth);
 
     return () => {
       window.removeEventListener("resize", resetInnerWidth);
     };
-  }, []);
+  }, [setInnerWidth]);
 
   return innerWidth;
 };
@@ -190,7 +188,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <Container>
+    <Container innerWidth={innerWidth}>
       <HamburgerBar isOpen={isOpen} setIsOpen={setIsOpen} />
       <Title
         onClick={() => {

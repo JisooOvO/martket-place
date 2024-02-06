@@ -58,6 +58,7 @@ const Circle = styled.div`
 const AdvertiseSectionContianer = styled.section`
   width: 100%;
   height: 40rem;
+  box-sizing: border-box;
   position: relative;
 `;
 

@@ -4,6 +4,15 @@ import styled from "styled-components";
 const Button = styled.button`
   width: ${(p) => p.width};
   height: ${(p) => p.height};
+  border-width: 0;
+  background-color: white;
+  border-radius: 50%;
+  &:hover {
+    cursor: pointer;
+  }
+  &:focus-visible {
+    outline: none;
+  }
 `;
 
 const IconWrapper = (props) => {
