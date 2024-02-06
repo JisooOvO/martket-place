@@ -54,6 +54,9 @@ const Container = styled.div`
   width: 100%;
   height: 7rem;
   display: flex;
+  position: fixed;
+  top: 0;
+  z-index: 9999;
   justify-content: space-between;
   align-items: center;
   gap: 2rem;
@@ -68,7 +71,7 @@ const Container = styled.div`
   }
 `;
 
-const Title = styled.h1`
+const Title = styled.p`
   display: flex;
   font-size: 1.25rem;
   line-height: 1.75rem;
@@ -90,7 +93,7 @@ const HeaderForm = () => {
     <FormWrapper height={COMPONENT_HEIGHT} onSubmit={handleSubmit}>
       <Input placeholder="검색어를 입력하세요." />
       <IconWrapper
-        onclick={handleSubmit}
+        onClick={handleSubmit}
         icon={<SearchIcon />}
         width={COMPONENT_WIDTH}
         height={"80%"}
@@ -116,7 +119,7 @@ const HeaderNav = (props) => {
         icon={<ShoppingCartIcon />}
         width={COMPONENT_WIDTH}
         height={COMPONENT_HEIGHT}
-        onclick={() => {
+        onClick={() => {
           props.navigate("/my_cart");
         }}
       />
@@ -124,7 +127,7 @@ const HeaderNav = (props) => {
         icon={<UserIcon />}
         width={COMPONENT_WIDTH}
         height={COMPONENT_HEIGHT}
-        onclick={() => {
+        onClick={() => {
           props.navigate("/login");
         }}
       />
@@ -148,14 +151,14 @@ const HamburgerBar = (props) => {
           icon={<CloseIcon />}
           width={COMPONENT_WIDTH}
           height={COMPONENT_HEIGHT}
-          onclick={handleHamburgerClick}
+          onClick={handleHamburgerClick}
         />
       ) : (
         <IconWrapper
           icon={<MenuIcon />}
           width={COMPONENT_WIDTH}
           height={COMPONENT_HEIGHT}
-          onclick={handleHamburgerClick}
+          onClick={handleHamburgerClick}
         />
       )}
     </div>
@@ -190,9 +193,6 @@ const Header = () => {
     <Container>
       <HamburgerBar isOpen={isOpen} setIsOpen={setIsOpen} />
       <Title
-        style={{
-          height: COMPONENT_HEIGHT,
-        }}
         onClick={() => {
           navigate("/");
         }}

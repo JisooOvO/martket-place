@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import firstMainImage from "../images/main1.jpg";
 import IconWrapper from "../common/IconWrapper";
 import BeforeIcon from "../icons/BeforeIcon";
 import NextIcon from "../icons/NextIcon";
-import { BACKENDURL } from "../common/Backend";
 import styled from "styled-components";
 import { Container } from "../common/StyleComponent";
 
@@ -56,6 +55,31 @@ const Circle = styled.div`
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
+const AdvertiseSectionContianer = styled.section`
+  width: 100%;
+  height: 40rem;
+  position: relative;
+`;
+
+const Image = styled.img`
+  width: 100%;
+  height: 100%;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const NewArrival = styled.p`
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+`;
+
+const NewItems = styled.p`
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+`;
+
 const LeftArrowComponent = (props) => {
   const handleClickBefore = () => {
     props.setI((i) => (i + 2) % 3);
@@ -66,7 +90,7 @@ const LeftArrowComponent = (props) => {
         icon={<BeforeIcon />}
         width={50}
         height={50}
-        func={handleClickBefore}
+        onClick={handleClickBefore}
       />
     </LeftArrowWrapper>
   );
@@ -82,86 +106,69 @@ const RightArrowComponent = (props) => {
         icon={<NextIcon />}
         width={50}
         height={50}
-        func={handleClickNext}
+        onClick={handleClickNext}
       />
     </RightArrowWrapper>
   );
 };
 
-// 렌더링 2번되는 버그 고치기
 const BottomCircleComponent = (props) => {
-  console.log("im rendering", props);
   return (
     <CircleWrapper>
-      <Circle></Circle>
-      <Circle></Circle>
-      <Circle></Circle>
+      {[0, 1, 2].map((item) => {
+        if (item === props.i) return <Circle color="rgb(107 114 128)" />;
+        else return <Circle />;
+      })}
     </CircleWrapper>
   );
 };
 
 const AdvertiseSection = () => {
-  const [mainImage, setMainImage] = useState(firstMainImage);
-  const images = useRef([]);
+  const images = useRef([firstMainImage]);
+  const DELAY = useRef(5000);
   const [i, setI] = useState(0);
 
-  const intervalfunc = () => {
+  const intervalfunc = useCallback(() => {
     setI((prev) => (prev + 1) % 3);
-  };
+  }, []);
+
+  const loadImages = useCallback(async () => {
+    const imagePromises = [
+      import("../images/main2.jpg"),
+      import("../images/main3.jpg"),
+    ];
+    const loadedImages = await Promise.all(imagePromises);
+    loadedImages.forEach((item) => images.current.push(item.default));
+  }, []);
 
   useEffect(() => {
-    const DELAY = 5000;
-
-    images.current.push(firstMainImage);
-
-    const loadImages = async () => {
-      const imagePromises = [
-        import("../images/main2.jpg"),
-        import("../images/main3.jpg"),
-      ];
-
-      const loadedImages = await Promise.all(imagePromises);
-
-      loadedImages.forEach((item) => images.current.push(item.default));
-    };
-
     loadImages();
-
-    setInterval(intervalfunc, DELAY);
+    setInterval(intervalfunc, DELAY.current);
 
     return () => {
       clearInterval(intervalfunc);
     };
-  }, []);
-
-  useEffect(() => {
-    setMainImage(images.current[i]);
-  }, [i]);
+  }, [loadImages, intervalfunc]);
 
   return (
-    <section className="w-full h-[40rem] relative">
-      <LeftArrowComponent i={i} setI={setI} func={intervalfunc} />
-      {mainImage ? (
-        <img
-          src={mainImage}
-          alt="메인 이미지"
-          className="w-full h-full bg-gray hover:cursor-pointer"
-          loading="lazy"
-        />
+    <AdvertiseSectionContianer>
+      {images.current ? (
+        <Image src={images.current[i]} alt="메인 이미지" loading="lazy" />
       ) : (
         ""
       )}
-      <RightArrowComponent i={i} setI={setI} func={intervalfunc} />
+      <LeftArrowComponent i={i} setI={setI} />
+      <RightArrowComponent i={i} setI={setI} />
       <BottomCircleComponent i={i} />
-    </section>
+    </AdvertiseSectionContianer>
   );
 };
 
 const Main = () => {
   return (
     <Container>
-      <p className="text-2xl font-bold">New Arrival</p>
-      <p className="font-extralight mb-3">새로운 상품이 도착했습니다 ✨</p>
+      <NewArrival>New Arrival</NewArrival>
+      <NewItems>새로운 상품이 도착했습니다 ✨</NewItems>
       <AdvertiseSection />
     </Container>
   );

@@ -36,9 +36,10 @@ const NavContainer = styled.div`
   width: 100%;
   padding: 4rem 2rem 4rem 2rem;
   display: flex;
-  position: absolute;
+  position: fixed;
+  top: 7rem;
   background-color: #ffffff;
-  z-index: 9999;
+  z-index: 999;
   justify-content: center;
   align-items: center;
   gap: 1rem;

@@ -8,7 +8,7 @@ const Button = styled.button`
 
 const IconWrapper = (props) => {
   return (
-    <Button width={props.width} height={props.height} onClick={props.onclick}>
+    <Button width={props.width} height={props.height} onClick={props.onClick}>
       {props.icon}
     </Button>
   );
