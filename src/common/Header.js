@@ -8,9 +8,78 @@ import { AtomBamburgerIsOpen, AtomInnerWidth } from "../common/Atom";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CloseIcon from "../icons/CloseIcon";
+import styled from "styled-components";
 
 const COMPONENT_HEIGHT = "40%";
-const COMPONENT_WIDTH = 30;
+const COMPONENT_WIDTH = 30 + "px";
+
+const FormWrapper = styled.form`
+  height: ${(props) => props.height};
+  display: none;
+
+  @media (min-width: 850px) {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    gap: 2rem;
+  }
+`;
+
+const Input = styled.input`
+  max-width: 60rem;
+  min-width: 0px;
+  height: 100%;
+  flex-grow: 1;
+  border-width: 1px;
+  border-radius: 1.5rem;
+  border-color: #707070;
+  padding-left: 1rem;
+  padding-right: 1rem;
+`;
+
+const HeaderNavWrapper = styled.div`
+  display: flex;
+  height: 80%;
+  gap: 1rem;
+  align-items: center;
+
+  @media (min-width: 850px) {
+    gap: 2.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+`;
+
+const Container = styled.div`
+  width: 100%;
+  height: 7rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  border-width: 0 0 1px 0;
+  background-color: white;
+
+  @media (min-width: 850px) {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+`;
+
+const Title = styled.h1`
+  display: flex;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  align-items: center;
+  white-space: nowrap;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
 
 const HeaderForm = () => {
   const handleSubmit = (event) => {
@@ -18,35 +87,28 @@ const HeaderForm = () => {
   };
 
   return (
-    <form
-      style={{ height: COMPONENT_HEIGHT }}
-      className="items-center grow gap-8 md:flex hidden"
-      onSubmit={handleSubmit}
-    >
-      <input
-        className="border-black grow min-w-0 max-w-[60rem] h-full rounded-3xl border px-4"
-        placeholder="검색어를 입력하세요."
-      />
+    <FormWrapper height={COMPONENT_HEIGHT} onSubmit={handleSubmit}>
+      <Input placeholder="검색어를 입력하세요." />
       <IconWrapper
         onclick={handleSubmit}
         icon={<SearchIcon />}
         width={COMPONENT_WIDTH}
-        height={"100%"}
+        height={"80%"}
       />
-    </form>
+    </FormWrapper>
   );
 };
 
 const HeaderNav = (props) => {
   return (
-    <div className="flex gap-4 md:px-4 md:gap-10 items-center">
+    <HeaderNavWrapper>
       {props.innerWidth >= 850 ? (
         ""
       ) : (
         <IconWrapper
           icon={<SearchIcon />}
           width={COMPONENT_WIDTH}
-          height={"100%"}
+          height={COMPONENT_HEIGHT}
         />
       )}
 
@@ -63,10 +125,10 @@ const HeaderNav = (props) => {
         width={COMPONENT_WIDTH}
         height={COMPONENT_HEIGHT}
         onclick={() => {
-          props.navigate("/my_page");
+          props.navigate("/login");
         }}
       />
-    </div>
+    </HeaderNavWrapper>
   );
 };
 
@@ -100,11 +162,8 @@ const HamburgerBar = (props) => {
   );
 };
 
-const Header = () => {
+const useResetWidth = () => {
   const [innerWidth, setInnerWidth] = useRecoilState(AtomInnerWidth);
-  const [isOpen, setIsOpen] = useRecoilState(AtomBamburgerIsOpen);
-
-  const navigate = useNavigate();
 
   const resetInnerWidth = () => {
     setInnerWidth(window.innerWidth);
@@ -117,26 +176,32 @@ const Header = () => {
     return () => {
       window.removeEventListener("resize", resetInnerWidth);
     };
-    // eslint-disable-next-line
   }, []);
 
+  return innerWidth;
+};
+
+const Header = () => {
+  const [isOpen, setIsOpen] = useRecoilState(AtomBamburgerIsOpen);
+  const innerWidth = useResetWidth();
+  const navigate = useNavigate();
+
   return (
-    <div className="w-full bg-white h-28 px-8 md:px-16 flex justify-between gap-8 items-center border-x-0 border-t-0 border">
+    <Container>
       <HamburgerBar isOpen={isOpen} setIsOpen={setIsOpen} />
-      <h1
+      <Title
         style={{
           height: COMPONENT_HEIGHT,
         }}
-        className="text-xl font-semibold flex items-center whitespace-nowrap hover:cursor-pointer"
         onClick={() => {
           navigate("/");
         }}
       >
         Market Place
-      </h1>
+      </Title>
       <HeaderForm />
       <HeaderNav navigate={navigate} innerWidth={innerWidth} />
-    </div>
+    </Container>
   );
 };
 

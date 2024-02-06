@@ -3,22 +3,72 @@ import firstMainImage from "../images/main1.jpg";
 import IconWrapper from "../common/IconWrapper";
 import BeforeIcon from "../icons/BeforeIcon";
 import NextIcon from "../icons/NextIcon";
+import { BACKENDURL } from "../common/Backend";
+import styled from "styled-components";
+import { Container } from "../common/StyleComponent";
 
-const DELAY = 5000;
+const LeftArrowWrapper = styled.div`
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+`;
+
+const RightArrowWrapper = styled.div`
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+`;
+
+const CircleWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  position: absolute;
+  bottom: 0.5rem;
+  z-index: 50;
+`;
+
+const Circle = styled.div`
+  width: 1rem;
+  height: 1rem;
+  background-color: ${(props) => props.color || "white"};
+  border-radius: 50%;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+`;
 
 const LeftArrowComponent = (props) => {
   const handleClickBefore = () => {
     props.setI((i) => (i + 2) % 3);
   };
   return (
-    <div className="absolute top-1/2 translate-y-[-50%] left-4 bg-white rounded-[50%] w-10 h-10 flex items-center justify-center shadow-md">
+    <LeftArrowWrapper>
       <IconWrapper
         icon={<BeforeIcon />}
         width={50}
         height={50}
         func={handleClickBefore}
       />
-    </div>
+    </LeftArrowWrapper>
   );
 };
 
@@ -27,45 +77,26 @@ const RightArrowComponent = (props) => {
     props.setI((i) => (i + 1) % 3);
   };
   return (
-    <div className="absolute top-1/2 translate-y-[-50%] right-4 bg-white rounded-[50%] w-10 h-10 flex items-center justify-center shadow-md">
+    <RightArrowWrapper>
       <IconWrapper
         icon={<NextIcon />}
         width={50}
         height={50}
         func={handleClickNext}
       />
-    </div>
+    </RightArrowWrapper>
   );
 };
 
+// 렌더링 2번되는 버그 고치기
 const BottomCircleComponent = (props) => {
-  useEffect(() => {
-    const imageCircles = document.querySelectorAll("#imageCircle");
-    imageCircles.forEach((item, idx) => {
-      if (idx === props.i) {
-        item.classList.add("bg-gray-500");
-        item.classList.remove("bg-white");
-      } else {
-        item.classList.remove("bg-gray-500");
-        item.classList.add("bg-white");
-      }
-    });
-  }, [props.i]);
+  console.log("im rendering", props);
   return (
-    <div className="w-full absolute bottom-2 z-50 flex justify-center items-center gap-4">
-      <div
-        id="imageCircle"
-        className="w-4 h-4 rounded-[50%] bg-white shadow-md hover:cursor-default"
-      ></div>
-      <div
-        id="imageCircle"
-        className="w-4 h-4 rounded-[50%] bg-white shadow-md hover:cursor-default"
-      ></div>
-      <div
-        id="imageCircle"
-        className="w-4 h-4 rounded-[50%] bg-white shadow-md hover:cursor-default"
-      ></div>
-    </div>
+    <CircleWrapper>
+      <Circle></Circle>
+      <Circle></Circle>
+      <Circle></Circle>
+    </CircleWrapper>
   );
 };
 
@@ -79,6 +110,8 @@ const AdvertiseSection = () => {
   };
 
   useEffect(() => {
+    const DELAY = 5000;
+
     images.current.push(firstMainImage);
 
     const loadImages = async () => {
@@ -112,7 +145,7 @@ const AdvertiseSection = () => {
         <img
           src={mainImage}
           alt="메인 이미지"
-          className="w-full h-full hover:cursor-pointer"
+          className="w-full h-full bg-gray hover:cursor-pointer"
           loading="lazy"
         />
       ) : (
@@ -126,13 +159,11 @@ const AdvertiseSection = () => {
 
 const Main = () => {
   return (
-    <div className="px-4 md:px-16 py-10">
+    <Container>
       <p className="text-2xl font-bold">New Arrival</p>
-      <p className="font-extralight text-gray-500 mb-3">
-        새로운 상품이 도착했습니다 ✨
-      </p>
+      <p className="font-extralight mb-3">새로운 상품이 도착했습니다 ✨</p>
       <AdvertiseSection />
-    </div>
+    </Container>
   );
 };
 

@@ -2,14 +2,72 @@ import { useRecoilValue } from "recoil";
 import { AtomBamburgerIsOpen } from "../common/Atom";
 import IconWrapper from "../common/IconWrapper";
 import CategoryIcon from "../icons/CategoryIcon";
+import styled from "styled-components";
 
-const HamburgerMenu = () => {
-  return (
-    <div className="bg-blue-500 z-50 absolute top-0 left-0 w-full px-8 md:px-16 py-10">
-      크헬헬
-    </div>
-  );
-};
+const CategoryNavContainer = styled.nav`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (min-width: 850px) {
+    flex-direction: grow;
+    align-items: start;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+`;
+
+const CategoryListWrapper = styled.ul`
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  overflow: hidden;
+`;
+
+const CategoryList = styled.li`
+  text-align: center;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const NavContainer = styled.div`
+  width: 100%;
+  padding: 4rem 2rem 4rem 2rem;
+  display: flex;
+  position: absolute;
+  background-color: #ffffff;
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 2px 6px 4px rgba(0, 0, 0, 0.2);
+  @media (min-width: 850px) {
+    padding-left: 4rem;
+    padding-right: 4rem;
+    justify-content: start;
+  }
+`;
+
+const NavIconWrapper = styled.div`
+  display: none;
+  z-index: -10;
+  @media (min-width: 850px) {
+    width: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const CategoryTitle = styled.p`
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+`;
 
 const items = [
   { id: 1, cateName: "All" },
@@ -23,32 +81,38 @@ const items = [
 
 const CategoryNav = () => {
   return (
-    <nav className="flex w-full md:grow flex-col relative items-center md:items-start md:text-xl">
-      <ul className="flex w-full justify-around overflow-hidden">
+    <CategoryNavContainer>
+      <CategoryListWrapper>
         {items.map((item) => (
-          <li key={item.id} className="text-center hover:cursor-pointer">
-            {item.cateName}
-          </li>
+          <CategoryList key={item.id}>{item.cateName}</CategoryList>
         ))}
-      </ul>
-    </nav>
+      </CategoryListWrapper>
+    </CategoryNavContainer>
+  );
+};
+
+const NavIcon = () => {
+  return (
+    <NavIconWrapper>
+      <IconWrapper icon={<CategoryIcon />} width={30} height={2.5 + "rem"} />
+      <CategoryTitle>카테고리</CategoryTitle>
+    </NavIconWrapper>
   );
 };
 
 const Nav = () => {
   const isOpen = useRecoilValue(AtomBamburgerIsOpen);
   return (
-    <div className="w-full relative px-8 md:px-16 py-10 flex justify-center md:justify-start items-center gap-4">
-      {isOpen ? <HamburgerMenu /> : ""}
-
-      <div className="flex-col md:flex hidden items-center w-[4rem]">
-        <div className="-z-10">
-          <IconWrapper icon={<CategoryIcon />} width={30} height={30} />
-        </div>
-        <p className="font-bold text-sm whitespace-nowrap">카테고리</p>
-      </div>
-      <CategoryNav />
-    </div>
+    <>
+      {isOpen ? (
+        <NavContainer>
+          <NavIcon />
+          <CategoryNav />
+        </NavContainer>
+      ) : (
+        ""
+      )}
+    </>
   );
 };
 

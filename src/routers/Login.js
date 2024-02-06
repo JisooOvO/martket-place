@@ -1,36 +1,102 @@
+import styled from "styled-components";
 import { BACKENDURL } from "../common/Backend";
+
+const FormInputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Label = styled.label`
+  margin-bottom: 0.75rem;
+`;
+
+const Input = styled.input`
+  height: 3.5rem;
+  margin-bottom: 1.75rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-width: 1px;
+  border-radius: 0.75rem;
+`;
+
+const LoginNavWrapper = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+`;
+
+const LoginForm = styled.form`
+  padding: 2.5rem;
+  margin: 5rem auto 5rem auto;
+  width: 75%;
+  max-width: 40rem;
+  border-width: 1px;
+  border-radius: 0.75rem;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+`;
+
+const Title = styled.h2`
+  margin-bottom: 2.5rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
+`;
+
+const Button = styled.button`
+  width: 100%;
+  color: white;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.75rem;
+  background-color: rgb(96 165 250);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 0.75rem;
+`;
+
+const Line = styled.hr`
+  width: 100%;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+`;
+
+const LoginFooter = styled.div`
+  text-align: center;
+  color: rgb(107 114 128);
+`;
+
+const Signup = styled.span`
+  color: black;
+  padding-left: 1rem;
+`;
 
 const FormInput = (props) => {
   return (
-    <div className="flex flex-col">
-      <label className="mb-3">{props.title}</label>
-      <input
-        className="border mb-7 h-12 rounded-xl px-2"
+    <FormInputContainer>
+      <Label>{props.title}</Label>
+      <Input
         name={props.name}
         type={props.type}
         placeholder={props.placeholder}
         required={props.required}
         pattern={props.pattern}
       />
-    </div>
+    </FormInputContainer>
   );
 };
 
 const LoginNav = () => {
   return (
-    <div className="flex justify-between mb-10">
-      <div className="flex gap-4">
-        <p>아이디 찾기</p>
-        <p>비밀번호 찾기</p>
-      </div>
-      <p>회원가입</p>
-    </div>
+    <LoginNavWrapper>
+      <p>아이디 찾기</p>
+      <p>비밀번호 찾기</p>
+    </LoginNavWrapper>
   );
 };
 
 const loginData = [
   {
-    id: 1,
+    key: 1,
     title: "아이디",
     name: "username",
     type: "text",
@@ -39,7 +105,7 @@ const loginData = [
     pattern: "[a-z0-9]{3,9}",
   },
   {
-    id: 2,
+    key: 2,
     title: "비밀번호",
     name: "password",
     type: "text",
@@ -53,6 +119,8 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = Object.fromEntries(new FormData(event.target).entries());
+
+    // 나중에 API로 정리
     fetch(BACKENDURL + "/api/login", {
       method: "post",
       headers: {
@@ -64,28 +132,20 @@ const Login = () => {
       .then((data) => console.log(data))
       .catch((err) => console.log(err));
   };
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="px-10 py-10 my-20 border w-3/4 mx-auto rounded-xl shadow-md"
-    >
-      <h2 className="text-2xl mb-10">LOGIN</h2>
+    <LoginForm onSubmit={handleSubmit}>
+      <Title>LOGIN</Title>
       {loginData.map((item) => (
-        <FormInput
-          key={`formkey${item.id}`}
-          title={item.title}
-          name={item.name}
-          type={item.type}
-          placeholder={item.placeholder}
-          required={item.required}
-          pattern={item.pattern}
-        />
+        <FormInput {...item} />
       ))}
       <LoginNav />
-      <button className="w-full py-5 text-xl font-bold bg-blue-400 text-white rounded-xl shadow-md">
-        로그인
-      </button>
-    </form>
+      <Button>로그인</Button>
+      <Line />
+      <LoginFooter>
+        회원이 아니신가요? <Signup>회원가입</Signup>
+      </LoginFooter>
+    </LoginForm>
   );
 };
 
